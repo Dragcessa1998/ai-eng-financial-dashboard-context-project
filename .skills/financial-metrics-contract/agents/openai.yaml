@@ -1,0 +1,4 @@
+interface:
+  display_name: "Financial Metrics Contract"
+  short_description: "Validate financial metric contracts end to end"
+  default_prompt: "Use $financial-metrics-contract to audit a dashboard metric from API payload through displayed formatting."
