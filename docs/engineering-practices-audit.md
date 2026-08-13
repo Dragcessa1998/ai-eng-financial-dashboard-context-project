@@ -43,3 +43,7 @@ The following focused rules address the risks while preserving the useful patter
 5. **Validation gates** — backend tests plus frontend test/lint/build and compose validation before committing relevant changes; failures must be reported rather than bypassed.
 
 Each rule is deliberately scoped by file pattern and responsibility. The validation scenarios in `.agents/rules/VALIDATION.md` exercise the rules against tasks that could realistically occur in this repository.
+
+## Follow-up status
+
+The agent-skills enhancement resolved the hard-coded reporting-period finding and improved chart accessibility/bundle splitting. Workspace-local tooling also allowed the frontend gates and all backend tests to run successfully. Remaining findings are unchanged unless explicitly marked resolved in `memory-bank/current-status.md`; full evidence is in `docs/agent-skills-audit.md`.

@@ -72,3 +72,7 @@ The repository contains 15 backend tests and 5 frontend unit tests. Their existe
 ## Handover conclusion
 
 This is a small two-service demonstration with a clear happy path and useful unit/endpoint coverage. The primary maintenance risks are duplicated domain contracts across Python and TypeScript, a broad CORS policy combined with credential support, global random-state mutation, stale/unused mock data, a hard-coded reporting period, and missing automation that would make the documented checks reproducible for every contributor.
+
+## Follow-up validation and resolved finding
+
+After this baseline was written, workspace-local Node/npm and `uv` were discovered. Frontend checks and all 15 backend tests pass; exact current results are recorded in `docs/agent-skills-audit.md`. The reporting-period finding is also resolved on `feature/agent-skills`: the header now derives its date range from the API response. Docker remains blocked by the local Colima/UTM `qemu-img` installation, not by an application failure.

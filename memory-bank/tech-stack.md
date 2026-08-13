@@ -18,6 +18,7 @@ Browser
 - TypeScript 6.0 in Vite 8.
 - Tailwind CSS 4 through `@tailwindcss/vite`.
 - Recharts 3.8 for charts and Lucide React for icons.
+- Heavy chart modules are split with `React.lazy`/`Suspense`; the main production JavaScript chunk is 188.25 kB in the latest verified build.
 - Small shadcn-style primitives in `src/components/ui`.
 - Vitest 4.1 for unit tests; ESLint 9 with TypeScript and React hooks rules.
 
@@ -58,4 +59,4 @@ docker compose up --build
 curl --fail http://localhost:8000/health
 ```
 
-On the 2026-08-13 handover workstation, Docker and Node/npm were unavailable and system Python lacked pytest. These commands are the required gates, not recorded passing results. See `docs/handover-summary.md` for the exact attempt record.
+On 2026-08-13, workspace-local Node/npm and `uv` installations were discovered after the initial handover audit. Frontend test/lint/typecheck/build and 15 backend tests subsequently passed. Docker runtime validation remains unavailable because the local Colima/QEMU wrapper points to a missing UTM `qemu-img` binary. See `docs/agent-skills-audit.md` for current evidence and `docs/handover-summary.md` for the original baseline attempt.

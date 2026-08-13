@@ -11,6 +11,14 @@ Updated: 2026-08-13
 - Deterministic seeded demo generation and chronological public lists.
 - Fifteen backend tests covering helpers, filters, aggregations, comparison, alerts, and segment endpoints.
 
+## Agent-skills enhancement completed locally
+
+- Installed and loaded accessibility, Vercel React best-practice, and performance skills with locked sources.
+- Added keyboard bypass, focus styling, live loading/error semantics, decorative-icon treatment, and exact textual equivalents for both charts.
+- Added Vite page metadata and split Recharts into lazy chunks, reducing the main production JavaScript bundle from 585.98 kB to 188.25 kB.
+- Created and validated `.skills/financial-metrics-contract`, then used it to derive the reporting period from API dates and expand financial edge-case tests from five to eight.
+- Detailed evidence and framework-specific decisions are in `docs/agent-skills-audit.md`.
+
 ## Context-engineering handover completed locally
 
 - Phase 1: evidence-backed AI handover summary and correction log.
@@ -24,32 +32,32 @@ Updated: 2026-08-13
 - Static inspection: complete for repository structure, source, configurations, tests, and recent history.
 - Documentation formatting: `git diff --check` passed during each phase.
 - Rule applicability: all five rules passed the scenarios recorded in `.agents/rules/VALIDATION.md`.
-- Runtime Docker validation: not run because the host has no `docker` executable.
-- Backend tests: not run because system Python has no installed `pytest`.
-- Frontend test/lint/build: not run because the host has no Node/npm.
-
-Unavailable tooling is an environment limitation, not evidence that the application passes or fails.
+- Frontend: 8/8 tests, ESLint, TypeScript no-emit, and production build pass with workspace-local Node/npm.
+- Backend: 15/15 tests pass through workspace-local `uv`; one upstream Starlette/httpx deprecation warning remains.
+- Contract: generated OpenAPI `FinancialMovement` agrees with the current TypeScript field names, required fields, and enums.
+- Custom skill: official quick validator passes.
+- Local browser: API data, KPIs, both charts, derived date range, page metadata, and skip-link focus behavior verified.
+- Runtime Docker validation: blocked by the missing `qemu-img` binary referenced by the local Colima/UTM wrapper.
 
 ## Known product and engineering gaps
 
 1. Credentialed CORS is configured with a wildcard origin.
 2. Request code mutates Python's global random state.
 3. Backend and frontend domain contracts are duplicated manually.
-4. The visible `2024 - Full Year` period can disagree with date-relative generated data.
-5. Frontend and backend have competing aggregation implementations.
-6. Empty facets and reversed comparison ranges lack explicit policies/tests.
-7. `mock-data.ts` is unused and can drift.
-8. Backend dependencies are unpinned and no CI workflow enforces the documented gates.
-9. The browser error state has no retry and discards diagnostic category/status.
+4. Frontend and backend have competing aggregation implementations.
+5. Empty facets and reversed comparison ranges lack explicit policies/tests.
+6. `mock-data.ts` and `hero.png` are unused and can drift.
+7. Backend dependencies are unpinned and no CI workflow enforces the documented gates.
+8. The browser error state has no retry and discards diagnostic category/status.
 
 ## Next priorities
 
-1. On a host with Docker and Node, run the full verification sequence and record exact versions/results.
+1. Restore a working QEMU/Colima installation and run the full Docker Compose/health verification.
 2. In a separate code-change branch, fix CORS and localize random/date dependencies with tests.
-3. Establish one aggregation owner for the dashboard and derive the period label from data.
+3. Establish one aggregation owner for the dashboard.
 4. Generate or contract-test TypeScript types from OpenAPI.
 5. Pin backend dependencies and add CI for backend tests and frontend test/lint/build.
-6. Remove or explicitly convert `mock-data.ts` into a test fixture.
+6. Remove or explicitly convert `mock-data.ts` into a test fixture and remove the unused `hero.png` asset.
 
 ## External delivery state
 

@@ -19,4 +19,4 @@ The rule set was tested through repository-specific change simulations. These ar
 
 ## Validation limitations
 
-Semantic applicability was reviewed against source and documented above. Runtime gates could not be executed on the current host because Docker, Node/npm, and Python pytest are unavailable; this limitation is recorded rather than treated as a pass.
+Semantic applicability was reviewed against source and documented above. A later workspace-tool discovery allowed frontend test/lint/typecheck/build and backend pytest to pass; the current evidence is in `docs/agent-skills-audit.md`. Docker runtime remains unavailable because the local Colima wrapper references a missing UTM `qemu-img` binary.

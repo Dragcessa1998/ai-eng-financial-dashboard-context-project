@@ -22,7 +22,9 @@ Named personas, organization size, compliance requirements, and formal success t
 2. The app requests all movements from `GET /api/metrics`.
 3. While waiting, KPI and chart skeletons are visible.
 4. On success, the browser calculates KPI/monthly series and renders cards and charts.
-5. On request failure, a safe Spanish error message is displayed; there is currently no retry control.
+5. On request failure, an English screen-reader alert displays a safe error message; there is currently no retry control.
+
+The visible reporting-period badge is derived from the earliest and latest movement dates returned by the API rather than a hard-coded calendar year.
 
 ## Domain vocabulary
 
@@ -42,3 +44,4 @@ These wire values are contracts. User-facing copy can be friendlier, but code mu
 - The checked-in static `mock-data.ts` is not the current runtime source.
 - Aggregate API routes exist beyond what the current screen consumes.
 - Visual redesign and new features are outside the context-handover project unless needed to validate a repository rule.
+- The dashboard has no runtime image element; the checked-in `hero.png` asset is unused.
