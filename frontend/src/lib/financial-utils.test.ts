@@ -5,6 +5,7 @@ import {
   computeMonthlyData,
   formatCurrency,
   formatPercent,
+  formatReportingPeriod,
 } from "./financial-utils";
 import type { FinancialMovement } from "./financial-types";
 
@@ -58,6 +59,29 @@ describe("computeKPIs", () => {
     const metrics = computeKPIs(onlyOutcomes);
     expect(metrics.profitPercent).toBe(0);
   });
+
+  it("returns zero totals for an empty collection", () => {
+    expect(computeKPIs([])).toEqual({
+      totalIncome: 0,
+      totalOutcome: 0,
+      profit: 0,
+      profitPercent: 0,
+    });
+  });
+
+  it("preserves a negative profit and margin", () => {
+    const metrics = computeKPIs([
+      { ...sampleMovements[0], amount: 100 },
+      { ...sampleMovements[1], amount: 250 },
+    ]);
+
+    expect(metrics).toEqual({
+      totalIncome: 100,
+      totalOutcome: 250,
+      profit: -150,
+      profitPercent: -150,
+    });
+  });
 });
 
 describe("computeMonthlyData", () => {
@@ -110,5 +134,10 @@ describe("formatters", () => {
 
   it("formats percent with one decimal", () => {
     expect(formatPercent(15.555)).toBe("15.6%");
+  });
+
+  it("derives the reporting period from unsorted API dates", () => {
+    expect(formatReportingPeriod(sampleMovements)).toBe("Jan 2024 – Feb 2024");
+    expect(formatReportingPeriod([])).toBe("No reporting period");
   });
 });

@@ -6,7 +6,11 @@ import {
   type KPIMetrics,
   type MonthlyDataPoint,
 } from "@/lib/financial-types";
-import { computeKPIs, computeMonthlyData } from "@/lib/financial-utils";
+import {
+  computeKPIs,
+  computeMonthlyData,
+  formatReportingPeriod,
+} from "@/lib/financial-utils";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "";
 
@@ -44,6 +48,7 @@ async function fetchFinancialData(): Promise<FinancialMovement[]> {
 function App() {
   const [metrics, setMetrics] = useState<KPIMetrics | null>(null);
   const [monthlyData, setMonthlyData] = useState<MonthlyDataPoint[]>([]);
+  const [period, setPeriod] = useState("Loading reporting period");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -52,6 +57,7 @@ function App() {
       .then((movements) => {
         setMetrics(computeKPIs(movements));
         setMonthlyData(computeMonthlyData(movements));
+        setPeriod(formatReportingPeriod(movements));
       })
       .catch(() => {
         setError(
@@ -76,7 +82,7 @@ function App() {
       >
         <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
           <div className="flex flex-col gap-8">
-            <DashboardHeader period="2024 - Full Year" />
+            <DashboardHeader period={period} />
 
             <p className="sr-only" role="status" aria-live="polite">
               {loading ? "Loading financial dashboard data" : "Financial dashboard data loaded"}

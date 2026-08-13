@@ -81,3 +81,21 @@ export function formatCurrency(value: number): string {
 export function formatPercent(value: number): string {
   return `${value.toFixed(1)}%`;
 }
+
+export function formatReportingPeriod(movements: FinancialMovement[]): string {
+  if (movements.length === 0) {
+    return "No reporting period";
+  }
+
+  const dates = movements.map((movement) => movement.create_date).sort();
+  const formatMonthYear = (isoDate: string) =>
+    new Intl.DateTimeFormat("en-US", {
+      month: "short",
+      year: "numeric",
+      timeZone: "UTC",
+    }).format(new Date(`${isoDate}T00:00:00Z`));
+
+  const firstPeriod = formatMonthYear(dates[0]);
+  const lastPeriod = formatMonthYear(dates[dates.length - 1]);
+  return firstPeriod === lastPeriod ? firstPeriod : `${firstPeriod} – ${lastPeriod}`;
+}
