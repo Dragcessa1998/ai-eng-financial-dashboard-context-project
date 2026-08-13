@@ -1,8 +1,6 @@
-import { useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { DashboardHeader } from "@/components/dashboard/dashboard-header";
 import { KPIRow } from "@/components/dashboard/kpi-row";
-import { IncomeOutcomeChart } from "@/components/dashboard/income-outcome-chart";
-import { ProfitPercentChart } from "@/components/dashboard/profit-percent-chart";
 import {
   type FinancialMovement,
   type KPIMetrics,
@@ -11,6 +9,29 @@ import {
 import { computeKPIs, computeMonthlyData } from "@/lib/financial-utils";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "";
+
+const IncomeOutcomeChart = lazy(() =>
+  import("@/components/dashboard/income-outcome-chart").then((module) => ({
+    default: module.IncomeOutcomeChart,
+  })),
+);
+
+const ProfitPercentChart = lazy(() =>
+  import("@/components/dashboard/profit-percent-chart").then((module) => ({
+    default: module.ProfitPercentChart,
+  })),
+);
+
+function ChartModuleFallback({ label }: { label: string }) {
+  return (
+    <div
+      role="status"
+      className="flex min-h-[376px] items-center justify-center rounded-xl border border-border/60 bg-card text-sm text-muted-foreground"
+    >
+      Loading {label}
+    </div>
+  );
+}
 
 async function fetchFinancialData(): Promise<FinancialMovement[]> {
   const response = await fetch(`${API_BASE_URL}/api/metrics`);
@@ -78,8 +99,12 @@ function App() {
               aria-label="Financial charts"
               className="grid grid-cols-1 gap-4 xl:grid-cols-2"
             >
-              <IncomeOutcomeChart data={monthlyData} loading={loading} />
-              <ProfitPercentChart data={monthlyData} loading={loading} />
+              <Suspense fallback={<ChartModuleFallback label="income and outcome chart" />}>
+                <IncomeOutcomeChart data={monthlyData} loading={loading} />
+              </Suspense>
+              <Suspense fallback={<ChartModuleFallback label="profit margin chart" />}>
+                <ProfitPercentChart data={monthlyData} loading={loading} />
+              </Suspense>
             </section>
           </div>
         </div>
