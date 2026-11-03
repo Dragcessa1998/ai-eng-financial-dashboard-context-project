@@ -19,13 +19,16 @@ function formatMonthYearLabel(yearMonthKey: string): string {
 }
 
 export function computeKPIs(movements: FinancialMovement[]): KPIMetrics {
-  const totalIncome = movements
-    .filter((m) => m.operation_type === "income")
-    .reduce((sum, m) => sum + m.amount, 0);
+  let totalIncome = 0;
+  let totalOutcome = 0;
 
-  const totalOutcome = movements
-    .filter((m) => m.operation_type === "outcome")
-    .reduce((sum, m) => sum + m.amount, 0);
+  for (const movement of movements) {
+    if (movement.operation_type === "income") {
+      totalIncome += movement.amount;
+    } else {
+      totalOutcome += movement.amount;
+    }
+  }
 
   const profit = totalIncome - totalOutcome;
   const profitPercent = totalIncome > 0 ? (profit / totalIncome) * 100 : 0;
@@ -77,4 +80,22 @@ export function formatCurrency(value: number): string {
 
 export function formatPercent(value: number): string {
   return `${value.toFixed(1)}%`;
+}
+
+export function formatReportingPeriod(movements: FinancialMovement[]): string {
+  if (movements.length === 0) {
+    return "No reporting period";
+  }
+
+  const dates = movements.map((movement) => movement.create_date).sort();
+  const formatMonthYear = (isoDate: string) =>
+    new Intl.DateTimeFormat("en-US", {
+      month: "short",
+      year: "numeric",
+      timeZone: "UTC",
+    }).format(new Date(`${isoDate}T00:00:00Z`));
+
+  const firstPeriod = formatMonthYear(dates[0]);
+  const lastPeriod = formatMonthYear(dates[dates.length - 1]);
+  return firstPeriod === lastPeriod ? firstPeriod : `${firstPeriod} – ${lastPeriod}`;
 }
