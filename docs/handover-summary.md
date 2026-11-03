@@ -56,6 +56,24 @@ Evidence:
 - **Initial impression:** anomaly alerts compare a period with only the preceding period. **Correction:** `detect_outcome_alerts` compares each period with the average of all prior outcomes.
 - **Initial impression:** Docker and test commands had been verified on this workstation. **Correction:** source/configuration inspection succeeded, but this host has no `docker`, `node`/`npm`, or installed Python `pytest`, so runtime verification remains an explicit environment gap rather than a claimed result.
 
+## Claim-by-claim status
+
+Legend: ✅ verified in code or by a run · ❌ wrong, corrected above · ❓ unverified.
+
+| Claim from the AI summary | Status | Evidence |
+| --- | --- | --- |
+| Two services (Vite/React on 5173, FastAPI on 8000) wired by Compose | ✅ | `docker-compose.yml` |
+| Vite proxies `/api` to `backend:8000` | ✅ | `frontend/vite.config.ts` |
+| Backend also exposes debugpy on 5678 | ✅ | `backend/Dockerfile` CMD, compose ports |
+| `mock-data.ts` feeds the dashboard | ❌ | Unused; `App.tsx` fetches `/api/metrics` |
+| UI consumes the aggregate endpoints | ❌ | Only `/api/metrics`; aggregates computed in `financial-utils.ts` |
+| Data covers calendar year 2024 | ❌ | `_year_for_month` uses `date.today()`; on 2026-11-03 facets return 2025-11-01 → 2026-10-28 |
+| Alerts compare with the previous period only | ❌ | `detect_outcome_alerts` averages all prior periods |
+| 360 movements, 30 per month, `seed=42` | ✅ | `generate_mock_movements`; asserted in `test_generate_mock_movements_returns_full_year_sorted_data` |
+| 15 backend tests pass | ✅ | Re-run 2026-11-03: `python -m pytest -q` → 15 passed |
+| 5 frontend tests pass, lint clean | ✅ | Re-run 2026-11-03: `npm test` → 5 passed; `npm run lint` clean |
+| `docker compose up` brings the stack up healthy | ❓ | Not run: images not pulled on the verification host |
+
 ## Baseline verification record
 
 Commands attempted on 2026-08-13:
